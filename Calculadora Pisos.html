@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cálculo Insumos/Instalação</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0073e6;
+      margin-bottom: 25px;
+      font-size: 1.5em;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .output {
+      background-color: #f0f8ff;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      font-size: 1.1em;
+      color: #333;
+    }
+
+    .output span {
+      font-weight: bold;
+      display: block;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Cálculo Insumos/Instalação</h1>
+    
+    <label for="valorOrcamento">Valor do Orçamento (R$)</label>
+    <input type="number" id="valorOrcamento" placeholder="Digite o valor em reais" oninput="calcularValores()">
+
+    <label for="quantidadeProdutos">Quantidade (M², Linear...)</label>
+    <input type="number" id="quantidadeProdutos" placeholder="Digite a quantidade" oninput="calcularValorUnitario()">
+
+    <div class="output">
+      <div>Valor Produtos (70%)<span id="valorProdutos">R$ 0,00</span></div>
+      <div>Valor Unitário<span id="valorUnitario">R$ 0,00</span></div>
+      <div>Valor Instalação - Mão de obra (20%)<span id="valorInstalacao">R$ 0,00</span></div>
+      <div>Valor Insumos (10%)<span id="valorInsumos">R$ 0,00</span></div>
+    </div>
+  </div>
+
+  <script>
+    function formatarReal(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calcularValores() {
+      const input = document.getElementById('valorOrcamento');
+      const valor = parseFloat(input.value) || 0;
+
+      const produtos = valor * 0.70;
+      const instalacao = valor * 0.20;
+      const insumos = valor * 0.10;
+
+      document.getElementById('valorProdutos').textContent = formatarReal(produtos);
+      document.getElementById('valorInstalacao').textContent = formatarReal(instalacao);
+      document.getElementById('valorInsumos').textContent = formatarReal(insumos);
+      
+      // Recalcula o valor unitário quando o orçamento muda
+      calcularValorUnitario();
+    }
+
+    function calcularValorUnitario() {
+      const valorProdutos = parseFloat(document.getElementById('valorProdutos').textContent.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+      const quantidade = parseFloat(document.getElementById('quantidadeProdutos').value) || 0;
+      
+      const valorUnitario = quantidade > 0 ? valorProdutos / quantidade : 0;
+      
+      document.getElementById('valorUnitario').textContent = formatarReal(valorUnitario);
+    }
+  </script>
+
+</body>
+</html>
